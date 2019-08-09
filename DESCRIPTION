@@ -79,4 +79,5 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.1
 SystemRequirements: C++11
 Remotes:
-    jimhester/testthat@junit-utc_timestamp
+    jimhester/testthat@junit-utc_timestamp,
+    r-lib/bench
