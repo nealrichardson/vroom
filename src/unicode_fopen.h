@@ -1,4 +1,16 @@
+#pragma once
+
 #include <stdio.h>
+// clang-format off
+#ifdef __clang__
+# pragma clang diagnostic push
+# pragma clang diagnostic ignored "-Wsign-compare"
+#include <mio/shared_mmap.hpp>
+# pragma clang diagnostic pop
+#else
+#include <mio/shared_mmap.hpp>
+#endif
+// clang-format on
 
 #ifdef _WIN32
 #include <Rinternals.h>
@@ -18,11 +30,11 @@ inline FILE* unicode_fopen(const char* path, const char* mode) {
   wchar_t* buf;
   size_t len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
   if (len <= 0) {
-    error("Cannot convert file to Unicode: %s", path);
+    Rf_error("Cannot convert file to Unicode: %s", path);
   }
   buf = (wchar_t*)R_alloc(len, sizeof(wchar_t));
   if (buf == NULL) {
-    error("Could not allocate buffer of size: %ll", len);
+    Rf_error("Could not allocate buffer of size: %ll", len);
   }
 
   MultiByteToWideChar(CP_UTF8, 0, path, -1, buf, len);
@@ -32,4 +44,27 @@ inline FILE* unicode_fopen(const char* path, const char* mode) {
 #endif
 
   return out;
+}
+
+inline mio::mmap_source
+make_mmap_source(const char* file, std::error_code& error) {
+#ifdef __WIN32
+  // Then convert the path
+  wchar_t* buf;
+  size_t len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
+  if (len <= 0) {
+    Rf_error("Cannot convert file to Unicode: %s", path);
+  }
+  buf = (wchar_t*)malloc(len, sizeof(wchar_t));
+  if (buf == NULL) {
+    Rf_error("Could not allocate buffer of size: %ll", len);
+  }
+
+  MultiByteToWideChar(CP_UTF8, 0, path, -1, buf, len);
+  mio::mmap_source out = mio::make_mmap_source(buf, error);
+  free(buf);
+  return out;
+#else
+  return mio::make_mmap_source(file, error);
+#endif
 }
