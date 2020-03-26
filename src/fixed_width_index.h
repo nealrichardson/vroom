@@ -2,6 +2,10 @@
 
 #include "index.h"
 
+#ifdef _WIN32
+#include <locale>
+#endif
+
 // clang-format off
 #ifdef __clang__
 # pragma clang diagnostic push
@@ -54,7 +58,16 @@ public:
       : col_starts_(col_starts), col_ends_(col_ends), trim_ws_(trim_ws) {
 
     std::error_code error;
+
+#ifdef _WIN32
+    std::wstring w_filename =
+        std::wstring_convert<std::codecvt_utf8<wchar_t> >().from_bytes(
+            filename);
+
+    mmap_ = mio::make_mmap_source(w_filename, error);
+#else
     mmap_ = mio::make_mmap_source(filename, error);
+#endif
 
     if (error) {
       // We cannot actually portably compare error messages due to a bug in
