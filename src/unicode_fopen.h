@@ -49,18 +49,17 @@ inline FILE* unicode_fopen(const char* path, const char* mode) {
 inline mio::mmap_source
 make_mmap_source(const char* file, std::error_code& error) {
 #ifdef __WIN32
-  // Then convert the path
   wchar_t* buf;
-  size_t len = MultiByteToWideChar(CP_UTF8, 0, path, -1, NULL, 0);
+  size_t len = MultiByteToWideChar(CP_UTF8, 0, file, -1, NULL, 0);
   if (len <= 0) {
-    Rf_error("Cannot convert file to Unicode: %s", path);
+    Rf_error("Cannot convert file to Unicode: %s", file);
   }
-  buf = (wchar_t*)malloc(len, sizeof(wchar_t));
+  buf = (wchar_t*)malloc(len * sizeof(wchar_t));
   if (buf == NULL) {
     Rf_error("Could not allocate buffer of size: %ll", len);
   }
 
-  MultiByteToWideChar(CP_UTF8, 0, path, -1, buf, len);
+  MultiByteToWideChar(CP_UTF8, 0, file, -1, buf, len);
   mio::mmap_source out = mio::make_mmap_source(buf, error);
   free(buf);
   return out;
