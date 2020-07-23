@@ -1,0 +1,8 @@
+({ library(arrow); library(reticulate); use_condaenv("~/cudf"); cudf <- import("cudf") })
+x <- cudf$read_csv(file)
+print(x)
+a <- x$head()
+b <- x$tail()
+c <- x$take(sample(x$shape[[1]], 100) - 1L)
+d <- x$take(which(as.vector(x$payment_type$to_arrow() == "UNK"))) #x$query('payment_type == "UNK"')
+e <- x$groupby("payment_type")$tip_amount$mean()

@@ -1,5 +1,5 @@
 ({ library(arrow); library(dplyr) })
-x <- read_csv_arrow(file)
+x <- read_csv_arrow(file, quote = "", na = character())
 print(x)
 a <- head(x)
 b <- tail(x)

@@ -1,5 +1,5 @@
 ({ library(arrow); library(data.table) })
-x <- as_data_table(read_csv_arrow(file))
+x <- as.data.table(read_csv_arrow(file, quote = "", na = character()))
 print(x)
 a <- head(x)
 b <- tail(x)
