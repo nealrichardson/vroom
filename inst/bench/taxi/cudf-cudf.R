@@ -1,4 +1,4 @@
-({ library(arrow); library(reticulate); use_condaenv("~/cudf"); cudf <- import("cudf") })
+({ library(arrow); library(reticulate); use_condaenv("cudf"); cudf <- import("cudf") })
 x <- cudf$read_csv(file)
 print(x)
 a <- x$head()
