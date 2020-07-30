@@ -27,19 +27,19 @@ session_info.tsv: session_info.R
 	Rscript $< $(BENCH_WIDE_ROWS) $(BENCH_WIDE_COLS) $@
 
 taxi/%.tsv : taxi/%.R $(TAXI_INPUTS)
-	run-bench.R $< $@ $(word 1, $(TAXI_INPUTS))
+	Rscript run-bench.R $< $@ $(word 1, $(TAXI_INPUTS))
 
 taxi_multiple/%.tsv : taxi_multiple/%.R $(TAXI_INPUTS)
-	run-bench.R $< $@ $(TAXI_INPUTS)
+	Rscript run-bench.R $< $@ $(TAXI_INPUTS)
 
 taxi_writing/%.tsv : taxi_writing/%.R $(TAXI_INPUTS)
-	run-bench.R $< $@ $(word 1, $(TAXI_INPUTS))
+	Rscript run-bench.R $< $@ $(word 1, $(TAXI_INPUTS))
 
 fwf/%.tsv : fwf/%.R $(FWF_INPUT)
-	run-bench-fwf.R $< $@ $(FWF_INPUT)
+	Rscript run-bench-fwf.R $< $@ $(FWF_INPUT)
 
 %.tsv : %.R $(BENCH_INPUTS)
-	run-bench.R $< $@ $(@D)/input.tsv
+	Rscript run-bench.R $< $@ $(@D)/input.tsv
 
 clean:
 	rm -f $(BENCH_INPUTS) $(BENCH_MARKS) $(BENCH_OUT) session_info.tsv

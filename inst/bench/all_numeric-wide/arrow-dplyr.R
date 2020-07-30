@@ -1,1 +1,8 @@
-all_numeric-long/arrow-dplyr.R
+({ library(arrow); library(dplyr) })
+x <- read_tsv_arrow(file, quote = "", na = character())
+print(x)
+a <- head(x)
+b <- tail(x)
+c <- sample_n(x, 100)
+d <- filter(x, X1 > 3)
+e <- group_by(x, as.integer(X2)) %>% summarise(avg_X1 = mean(X1))
