@@ -5,4 +5,4 @@ a <- head(x)
 b <- tail(x)
 c <- x[sample(NROW(x), 100), ]
 d <- x[x$X1 > 3, ]
-e <- group_by(x, X2) %>% summarise(avg_X1 = mean(X1))
+e <- select(x, X1, X2) %>% collect %>% group_by(as.integer(X2)) %>% summarise(avg_X1 = mean(X1))
