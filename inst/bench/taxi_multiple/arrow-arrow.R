@@ -1,5 +1,5 @@
 ({library(arrow); library(dplyr)})
-x <- open_dataset(dirname(file[1]))
+x <- open_dataset(dirname(file[1]), format = "csv")
 print(x)
 a <- head(x)
 b <- tail(x)
